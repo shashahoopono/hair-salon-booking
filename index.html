@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> 郁剪髮型 - 已滿時段查詢</title>
+    <title>郁剪髮型 - 已滿時段查詢</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,41 +13,47 @@
         </header>
 
         <main>
-            <div class="date-selector">
+            <div class="date-selector" style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
                 <button id="prev-day" class="nav-btn">&lt;</button>
-                <h2 id="current-date">載入中...</h2>
+                <h2 id="current-date" style="margin: 0 15px;">載入中...</h2>
                 <button id="next-day" class="nav-btn">&gt;</button>
             </div>
 
-           <div id="live-clock" style="text-align: center; font-size: 2em; font-weight: bold; color: #2c3e50; margin: 5px 0;">
-                00:00:00
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div id="live-clock" style="font-size: 2.5em; font-weight: bold; color: #2c3e50; line-height: 1.2;">
+                    00:00:00
+                </div>
+                <button id="refresh-btn" style="margin-top: 8px; background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 5px 12px; font-size: 0.85rem; color: #666; cursor: pointer;">
+                    🔄 重新整理預約狀態
+                </button>
             </div>
 
             <div class="booked-times">
-                <h3>已滿時段：</h3>
+                <h3 style="border-left: 4px solid #007bff; padding-left: 10px; margin-bottom: 15px;">已滿時段：</h3>
                 <div id="time-slots" class="time-slots">
                     <p class="loading">載入中...</p>
                 </div>
             </div>
 
-            <div class="contact-info">
-                <p>其他時段請來電或 LINE 詢問</p>
-                <p id="contact-phone">📞 <a href="tel:0912345678">0910-924-319</a></p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+
+            <div class="contact-info" style="text-align: center;">
+                <p style="color: #ff4d4d; font-weight: bold; font-size: 1.1rem; margin-bottom: 10px;">
+                    ⚠️ 其他時段請來電或 LINE 詢問
+                </p>
+                
+                <p id="contact-phone" style="margin-bottom: 10px;">
+                    📞 <a href="tel:0910924319" style="text-decoration: none; color: #007bff; font-weight: bold;">0910-924-319</a>
+                </p>
                                 
                 <p id="contact-line">
-                    <a href="https://line.me/R/ti/p/@你的ID" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: center;">
-                        <svg class="line-icon" viewBox="0 0 24 24" fill="#06C755" style="width: 24px; margin-right: 5px;">
-                            <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.349 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
-                        </svg> 
-                        LINE: <span>點我加好友</span>
-                    </a>
+                    載入 LINE 資訊中...
                 </p>
-
             </div>
         </main>
 
         <footer>
-            <p>僅顯示已預約時段，想預約請用電話或Line聯繫</p>
+            <p>僅顯示已預約時段，預約請用電話或Line聯繫</p>
         </footer>
     </div>
 
