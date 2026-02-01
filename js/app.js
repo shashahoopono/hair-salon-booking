@@ -1,8 +1,6 @@
 /**
  * 一人美髮工作室預約系統 - 客人查看頁面
- * 讀取 Google Apps Script API，顯示已滿時段
  */
-
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbyhmLd4gvdmWJ6uAyRRQT9OyR6fse52fBZmRbQzhuk77jE4JAsnzqKtouXKcpU_aoQ/exec';
 
@@ -26,6 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     prevDayBtn.addEventListener('click', () => changeDate(-1));
     nextDayBtn.addEventListener('click', () => changeDate(1));
+    
+    // 啟動時鐘：每秒更新一次
+    setInterval(updateTimeOnly, 1000);
+    updateTimeOnly(); 
 });
 
 /**
@@ -45,12 +47,37 @@ async function loadSettings() {
         if (settings.contact_phone) {
             contactPhoneEl.innerHTML = `📞 <a href="tel:${settings.contact_phone.replace(/-/g, '')}">${settings.contact_phone}</a>`;
         }
+        
+        // --- 修正：置入帶有連結的 LINE 按鈕 ---
         if (settings.contact_line) {
-            contactLineEl.innerHTML = `💬 LINE: <span>${settings.contact_line}</span>`;
+            // 請記得將 @你的ID 換成真正的 ID
+            const lineId = settings.contact_line.startsWith('@') ? settings.contact_line : `@${settings.contact_line}`;
+            contactLineEl.innerHTML = `
+                <a href="https://line.me/R/ti/p/${lineId}" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: center;">
+                    <svg class="line-icon" viewBox="0 0 24 24" fill="#06C755" style="width: 24px; margin-right: 5px;">
+                        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.349 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                    </svg> 
+                    LINE: <span>點我加好友 (${settings.contact_line})</span>
+                </a>
+            `;
         }
     } catch (error) {
         console.log('使用預設設定:', error.message);
-        // 使用 HTML 中的預設值
+    }
+}
+
+/**
+ * 自動更新當前時間
+ */
+function updateTimeOnly() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+
+    const clockEl = document.getElementById('live-clock');
+    if (clockEl) {
+        clockEl.textContent = `${hh}:${mm}:${ss}`;
     }
 }
 
@@ -104,29 +131,15 @@ function formatDateForAPI(date) {
  */
 async function loadBookings() {
     timeSlotsEl.innerHTML = '<p class="loading">載入中...</p>';
-
     try {
         const dateStr = formatDateForAPI(currentDate);
         const response = await fetch(`${API_URL}?action=getBookings&date=${dateStr}`);
-
         if (!response.ok) throw new Error('無法載入預約資料');
-
         const data = await response.json();
         displayBookings(data.bookedTimes || []);
     } catch (error) {
         console.error('載入預約失敗:', error);
-
-        // 如果 API 尚未設定，顯示提示訊息
-        if (API_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-            timeSlotsEl.innerHTML = `
-                <p class="error">⚠️ 尚未設定 API</p>
-                <p class="loading" style="font-size: 0.9rem; margin-top: 10px;">
-                    請在 js/app.js 中設定<br>Google Apps Script URL
-                </p>
-            `;
-        } else {
-            timeSlotsEl.innerHTML = '<p class="error">無法載入資料，請稍後再試</p>';
-        }
+        timeSlotsEl.innerHTML = '<p class="error">無法載入資料，請稍後再試</p>';
     }
 }
 
@@ -138,10 +151,7 @@ function displayBookings(bookedTimes) {
         timeSlotsEl.innerHTML = '<p class="no-bookings">✨ 目前無已滿時段</p>';
         return;
     }
-
-    // 排序時段
     const sortedTimes = [...bookedTimes].sort();
-
     timeSlotsEl.innerHTML = sortedTimes.map(time => `
         <div class="time-slot">
             <span class="time">${time}</span>

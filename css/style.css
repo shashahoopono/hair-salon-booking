@@ -158,7 +158,8 @@ header h1 {
 }
 
 .contact-info p:first-child {
-    color: #666;
+    color: #ff4d4d;      /* 鮮紅色 */
+    font-weight: bold;   /* 加粗 */
     margin-bottom: 16px;
 }
 
