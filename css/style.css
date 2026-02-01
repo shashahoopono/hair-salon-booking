@@ -29,7 +29,7 @@ body {
 /* Header */
 header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 30px;
 }
 
 header h1 {
@@ -44,7 +44,7 @@ header h1 {
     align-items: center;
     justify-content: center;
     gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 30px;
 }
 
 .date-selector h2 {
@@ -52,6 +52,17 @@ header h1 {
     font-weight: 500;
     min-width: 180px;
     text-align: center;
+}
+
+.today-badge {
+    display: inline-block;
+    background: #4CAF50;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-top: 6px;
 }
 
 .nav-btn {
@@ -164,6 +175,13 @@ header h1 {
     text-decoration: underline;
 }
 
+.line-icon {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
 /* Footer */
 footer {
     margin-top: 24px;
@@ -191,7 +209,13 @@ footer p {
 
     .date-selector h2 {
         font-size: 1.1rem;
-        min-width: 150px;
+        min-width: 170px;
+    }
+
+    .today-badge {
+        font-size: 0.7rem;
+        padding: 3px 10px;
+        margin-top: 4px;
     }
 
     .nav-btn {

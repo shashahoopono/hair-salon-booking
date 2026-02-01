@@ -4,7 +4,7 @@
  */
 
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbyxWoTxhl0qL9QMheoawFnd_yHxRM25XjNfQ-Qo70ioI1sc2YYXn90ysgCIEomwU-A/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyhmLd4gvdmWJ6uAyRRQT9OyR6fse52fBZmRbQzhuk77jE4JAsnzqKtouXKcpU_aoQ/exec';
 
 // 當前顯示的日期
 let currentDate = new Date();
@@ -55,6 +55,16 @@ async function loadSettings() {
 }
 
 /**
+ * 檢查是否為今天
+ */
+function isToday(date) {
+    const today = new Date();
+    return date.getFullYear() === today.getFullYear() &&
+           date.getMonth() === today.getMonth() &&
+           date.getDate() === today.getDate();
+}
+
+/**
  * 更新日期顯示
  */
 function updateDateDisplay() {
@@ -63,7 +73,11 @@ function updateDateDisplay() {
     const day = currentDate.getDate();
     const weekday = weekdays[currentDate.getDay()];
 
-    currentDateEl.textContent = `📅 ${month}月${day}日（${weekday}）`;
+    if (isToday(currentDate)) {
+        currentDateEl.innerHTML = `📅 ${month}月${day}日（${weekday}）<br><span class="today-badge">今日</span>`;
+    } else {
+        currentDateEl.textContent = `📅 ${month}月${day}日（${weekday}）`;
+    }
 }
 
 /**
